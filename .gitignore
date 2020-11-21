@@ -1,0 +1,6 @@
+dist/
+node_modules/
+src/**/*.jsx
+tests/**/*.jsx
+.next
+.idea
