@@ -26,7 +26,7 @@ export const Nav: React.FC<NavProps> = (props: NavProps) => {
 
 function getNavItem(path: string, name: string): JSX.Element {
   return <Link href={path}>
-    <li key="path" className="px-3 py-2 rounded-sm hover:bg-gray-200 flex items-center cursor-pointer">
+    <li key={name} className="px-3 py-2 rounded-sm cursor-pointer hover:bg-gray-200 ">
       <a>{name}</a>
     </li>
   </Link>
