@@ -1,5 +1,6 @@
 import "react-notion/src/styles.css";
-import "prismjs/themes/prism-tomorrow.css";
+import "../styles/tailwind.css";
+import "../styles/prism.css";
 import React from "react";
 import Head from 'next/head';
 

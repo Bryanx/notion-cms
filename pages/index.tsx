@@ -1,26 +1,35 @@
 import { NotionRenderer, BlockMapType } from "react-notion";
 import { NextSeo } from "next-seo";
+import { config } from "../config";
 import Head from "next/head";
 import Link from "next/link";
-import fetch from "node-fetch";
+import { PageTableRow } from "../types/pageTableRow";
+import { getPageBlocks, getPagesTable } from "../lib/pages";
+import React from "react";
+import { Nav } from "../components/nav";
+
+interface PageProps {
+  blocks: BlockMapType;
+  pageRows: PageTableRow[];
+}
 
 export async function getStaticProps() {
-  const data: BlockMapType = await fetch(
-    "https://notion-api.splitbee.io/v1/page/d8ea983c5002452c9bcb23aa331dcb24"
-  ).then(res => res.json());
+  const blocks: BlockMapType = await getPageBlocks(`${config.notionHomePageId}`);
+  const pageRows = await getPagesTable();
 
   return {
     props: {
-      blockMap: data
+      blocks,
+      pageRows
     },
     revalidate: 1
   };
 }
 
-const Home = ({ blockMap }) => (
+const Home: React.FC<PageProps> = ({ blocks, pageRows }) => (
   <div>
     <NextSeo
-      title={"Bryan de Ridder"}
+      title={`${config.name}`}
       description="Hi, I'm Bryan! I like software programming and designing user interfaces."
       openGraph={{
         images: [
@@ -28,7 +37,7 @@ const Home = ({ blockMap }) => (
             url: 'https://avatars0.githubusercontent.com/u/17814185?s=460&u=3bf382ad4310fbbc7daef4a52ce05ade816459b3&v=4',
             width: 450,
             height: 450,
-            alt: 'Bryan de Ridder',
+            alt: `${config.name}`,
           }],
       }}
       twitter={{
@@ -38,10 +47,11 @@ const Home = ({ blockMap }) => (
     />
     <Head>
       <style>{`body { margin: 0;}`}</style>
-      <title>Bryan de Ridder</title>
+      <title>{config.name}</title>
     </Head>
+    <Nav pageRows={pageRows} />
     <NotionRenderer
-      blockMap={blockMap}
+      blockMap={blocks}
       fullPage
       hideHeader
       customBlockComponents={{
