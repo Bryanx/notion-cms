@@ -1,16 +1,24 @@
 import Link from "next/link";
-import { PageTableRow } from "../types/pageTableRow";
+import { PageRow } from "../types/pageTableRow";
 import { config } from "../config";
 
 interface NavProps {
-  pageRows: PageTableRow[];
+  pageRows: PageRow[];
 }
 
-export const Nav: React.FC<NavProps> = (props: NavProps) => {
+export const Nav = (props: NavProps) => {
 
   const navItems = props.pageRows
     .filter((row) => row.visibleOnNavbar)
-    .map((row: PageTableRow) => getNavItem(`/${row.path}`, row.path));
+    .map((row: PageRow) => getNavItem(`/${row.path}`, row.title));
+
+  function getNavItem(path: string, name: string): JSX.Element {
+    return <Link href={path}>
+      <li key={name} className="px-3 py-2 rounded-sm cursor-pointer hover:bg-gray-200 ">
+        <a>{name}</a>
+      </li>
+    </Link>
+  }
 
   return (
     <nav className="px-2 py-2 flex justify-between text-sm text-gray-700">
@@ -23,11 +31,3 @@ export const Nav: React.FC<NavProps> = (props: NavProps) => {
     </nav>
   );
 };
-
-function getNavItem(path: string, name: string): JSX.Element {
-  return <Link href={path}>
-    <li key={name} className="px-3 py-2 rounded-sm cursor-pointer hover:bg-gray-200 ">
-      <a>{name}</a>
-    </li>
-  </Link>
-}

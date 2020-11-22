@@ -1,65 +1,53 @@
-import { NotionRenderer, BlockMapType } from "react-notion";
+import { NotionRenderer } from "react-notion-x";
+import { ExtendedRecordMap } from "notion-types";
 import { NextSeo } from "next-seo";
 import { config } from "../config";
 import Head from "next/head";
 import Link from "next/link";
-import { PageTableRow } from "../types/pageTableRow";
+import { PageRow } from "../types/pageTableRow";
 import { getPageBlocks, getPagesTable } from "../lib/pages";
 import React from "react";
 import { Nav } from "../components/nav";
+import { Project } from "../components/project";
+import { ProjectRow } from "../types/projectRow";
+import { getProjectsTable } from "../lib/projects";
 
 interface PageProps {
-  blocks: BlockMapType;
-  pageRows: PageTableRow[];
+  pageBlocks: ExtendedRecordMap;
+  pageRows: PageRow[];
+  projectRows: ProjectRow[];
 }
 
 export async function getStaticProps() {
-  const blocks: BlockMapType = await getPageBlocks(`${config.notionHomePageId}`);
+  const pageBlocks: ExtendedRecordMap = await getPageBlocks(`${config.notionHomePageId}`);
   const pageRows = await getPagesTable();
+  const projectRows = await getProjectsTable();
 
   return {
     props: {
-      blocks,
-      pageRows
+      pageBlocks,
+      pageRows,
+      projectRows
     },
     revalidate: 1
   };
 }
 
-const Home: React.FC<PageProps> = ({ blocks, pageRows }) => (
-  <div>
+const Home: React.FC<PageProps> = ({ pageBlocks, pageRows, projectRows }) => (
+  <div className="home">
     <NextSeo
       title={`${config.name}`}
-      description="Hi, I'm Bryan! I like software programming and designing user interfaces."
-      openGraph={{
-        images: [
-          {
-            url: 'https://avatars0.githubusercontent.com/u/17814185?s=460&u=3bf382ad4310fbbc7daef4a52ce05ade816459b3&v=4',
-            width: 450,
-            height: 450,
-            alt: `${config.name}`,
-          }],
-      }}
-      twitter={{
-        handle: "@bryan_de_ridder",
-        cardType: "summary_large_image",
-      }}
+      description={`${config.description}`}
     />
     <Head>
-      <style>{`body { margin: 0;}`}</style>
       <title>{config.name}</title>
     </Head>
     <Nav pageRows={pageRows} />
     <NotionRenderer
-      blockMap={blocks}
-      fullPage
-      hideHeader
-      customBlockComponents={{
-        page: ({ blockValue, renderComponent }) => (
-          <Link href={`/${blockValue.id}`}>{renderComponent()}</Link>
-        )
-      }}
+      recordMap={pageBlocks}
+      fullPage={true}
     />
+    <Project projectRows={projectRows} />
   </div>
 );
 

@@ -1,17 +1,15 @@
 import * as React from "react";
-import Link from "next/link";
-import Head from "next/head";
-import { NextSeo } from "next-seo";
-import { NotionRenderer, BlockMapType } from "react-notion";
-import { PageTableRow } from "../types/pageTableRow";
+import { PageRow } from "../types/pageTableRow";
 import { getPageBlocks, getPagesTable } from "../lib/pages";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { ExtendedRecordMap } from "notion-types"
 import { Nav } from "../components/nav";
+import { NotionRenderer } from 'react-notion-x'
 
 interface PageProps {
-  blocks: BlockMapType;
-  page: PageTableRow;
-  pageRows: PageTableRow[];
+  blocks: ExtendedRecordMap;
+  page: PageRow;
+  pageRows: PageRow[];
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -51,9 +49,8 @@ const PageComponent: React.FC<PageProps> = ({ page, blocks, pageRows }) => {
     <>
       <Nav pageRows={pageRows} />
       <NotionRenderer
-        fullPage
-        hideHeader
-        blockMap={blocks}
+        recordMap={blocks}
+        fullPage={true}
       />
     </>
   );

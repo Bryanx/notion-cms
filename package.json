@@ -14,10 +14,11 @@
     "next": "^9.5.3",
     "next-seo": "^4.17.0",
     "node-fetch": "^2.6.0",
+    "notion-client": "^2.5.2",
     "postcss-import": "^12.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-notion": "^0.9.3",
+    "react-notion-x": "^2.5.1",
     "tailwindcss": "^1.9.4"
   },
   "devDependencies": {

@@ -5,13 +5,13 @@ import { ExtendedRecordMap } from "notion-types"
 
 const notion = new NotionAPI()
 
-export const getPagesTable = async (): Promise<PageRow[]> => {
+export const getProjectsTable = async (): Promise<PageRow[]> => {
   return await fetch(
-    `https://notion-api.splitbee.io/v1/table/${config.notionPagesTableId}`
+    `https://notion-api.splitbee.io/v1/table/${config.notionProjectsTableId}`
   ).then(res => res.json())
     .then(rows => rows.filter((row) => process.env.NODE_ENV === "development" || row.published));
 }
 
-export const getPageBlocks = async (pageId: string): Promise<ExtendedRecordMap> => {
+export const getProjectBlocks = async (pageId: string): Promise<ExtendedRecordMap> => {
   return await notion.getPage(`${pageId}`);
 }
